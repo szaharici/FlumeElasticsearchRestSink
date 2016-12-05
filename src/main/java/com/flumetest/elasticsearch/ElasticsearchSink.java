@@ -41,6 +41,7 @@ public class ElasticsearchSink extends AbstractSink implements Configurable {
     private RestClientBuilder builder; 
     private SinkCounter sinkCounter;
     private RestClient restClient;
+    private JsonParser parser;
     
     @Override
     public void configure(Context context) {
@@ -68,6 +69,7 @@ public class ElasticsearchSink extends AbstractSink implements Configurable {
         this.bulkline = bulkline;
         this.indexName = indexName;
         this.indexType = indexType;
+        this.parser =  new JsonParser();
         if (sinkCounter == null) {
             sinkCounter = new SinkCounter(getName());
         }
@@ -136,7 +138,6 @@ public class ElasticsearchSink extends AbstractSink implements Configurable {
                try {
                    HttpEntity entity = new StringEntity(batch.toString(), Charset.forName("UTF-8"));
                    Response restResponse = restClient.performRequest("POST", endpoint, Collections.<String, String>emptyMap(), entity);
-                   HttpEntity restResponseMessage = restResponse.getEntity();
                    txn.commit();
                    status = Status.READY;
                    if ( count < batchSize ) {
@@ -181,9 +182,8 @@ public class ElasticsearchSink extends AbstractSink implements Configurable {
             Map.Entry entry = (Map.Entry) it.next();
             String key = (String) entry.getKey();//Dragos said so 
             String value = (String)entry.getValue();
-            if ( value.matches("^\\{.*")) {
-                //This might be a json object 
-                JsonParser parser = new JsonParser();
+            if ( value.startsWith("{")) {
+                //This might be a json object
 	    	try {
                     JsonObject o = parser.parse(value).getAsJsonObject();
                     logline.add(key, o);		    		 
