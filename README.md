@@ -18,9 +18,11 @@ Configuration
 ------------
 
 Add the sink to the flume configuration as follows:
+```
         ....
         agent.sinks.elasticsearch.type = com.flumetest.elasticsearch.ElasticsearchSink
         agent.sinks.elasticsearch.hosts = host1:port1,host2:port2
         agent.sinks.elasticsearch.indexName = test
         agent.sinks.elasticsearch.indexType = bar_type
         agent.sinks.elasticsearch.batchSize = 500
+```
