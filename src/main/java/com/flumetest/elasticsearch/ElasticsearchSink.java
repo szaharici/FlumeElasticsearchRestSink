@@ -191,7 +191,7 @@ public class ElasticsearchSink extends AbstractSink implements Configurable {
                 catch (Exception e) {
                     //After all this is not valid json, but I will send it anyway
                     logline.addProperty(key, value);
-                    }
+                }
             }
             else {
                 logline.addProperty(key, value);
