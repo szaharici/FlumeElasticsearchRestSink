@@ -138,7 +138,7 @@ public class ElasticsearchSink extends AbstractSink implements Configurable {
            else {
                try {
                    HttpEntity entity = new StringEntity(batch.toString(), Charset.forName("UTF-8"));
-                   Response restResponse = restClient.performRequest("POST", endpoint, Collections.<String, String>emptyMap(), entity);
+                   restClient.performRequest("POST", endpoint, Collections.<String, String>emptyMap(), entity);
                    txn.commit();
                    status = Status.READY;
                    if ( count < batchSize ) {
@@ -183,30 +183,14 @@ public class ElasticsearchSink extends AbstractSink implements Configurable {
             Map.Entry entry = (Map.Entry) it.next();
             String key = (String) entry.getKey();//Dragos said so 
             String value = (String)entry.getValue();
-            if ( value.startsWith("{")) {
-                //This might be a json object
-	    	try {
-                    JsonObject o = parser.parse(value).getAsJsonObject();
-                    logline.add(key, o);		    		 
-                }
-                catch (Exception e) {
-                    //After all this is not valid json, but I will send it anyway
-                    logline.addProperty(key, value);
-                }
+	    	try{
+                 logline.add(key, parser.parse(value));
             }
-            else if (value.startsWith("[")){
-            	//This might be a json array
-            	try {
-            	JsonArray a = parser.parse(value).getAsJsonArray();
-            	logline.add(key, a);
-            	}
-            	catch (Exception e) {
-            		logline.addProperty(key, value);
-            	}
+            catch (Exception e) {
+            //After all this is not valid json, but I will send it anyway
+                 logline.addProperty(key, value);
             }
-            else {
-                logline.addProperty(key, value);
-            }
+            
         }
         String body = new String(event.getBody());
         logline.addProperty("message", body.toString());
