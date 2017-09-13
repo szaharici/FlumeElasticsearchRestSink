@@ -5,7 +5,7 @@ Flume elasticsearch REST sink
 Overview
 ---------
 
-This is a simple Elasticsearch flume sink based on the official java rest client by elastic.co https://www.elastic.co/guide/en/elasticsearch/client/java-rest/current/java-rest.html. 
+This is a simple Elasticsearch flume sink based on the official java rest client by elastic.co https://www.elastic.co/guide/en/elasticsearch/client/java-rest/current/index.html
 
 The sink should be compatible with all elasticsearch versions, it has been tested with elasticsearch 5.0
 
