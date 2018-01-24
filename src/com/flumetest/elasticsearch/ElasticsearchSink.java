@@ -138,13 +138,8 @@ public class ElasticsearchSink extends AbstractSink implements Configurable {
            } 
            else {
                try {
-<<<<<<< HEAD
                    HttpEntity entity = new StringEntity(batch.toString(),ContentType.APPLICATION_JSON);
-                   Response restResponse = restClient.performRequest("POST", endpoint, Collections.<String, String>emptyMap(), entity);
-=======
-                   HttpEntity entity = new StringEntity(batch.toString(), Charset.forName("UTF-8"));
                    restClient.performRequest("POST", endpoint, Collections.<String, String>emptyMap(), entity);
->>>>>>> a3705c4dc082d6c19c859da5fa3b62781c2b68b2
                    txn.commit();
                    status = Status.READY;
                    if ( count < batchSize ) {
