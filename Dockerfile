@@ -30,6 +30,7 @@ RUN apk update && apk add bash && rm -rf /var/cache/apk/*
 
 # Create flume user and switch to it
 RUN adduser flume -h /opt/flume -s /bin/false -D flume
+RUN chown -R flume /opt/flume/conf
 USER flume
 
 EXPOSE 4141 34545 5445
